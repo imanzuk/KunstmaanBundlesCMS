@@ -105,7 +105,7 @@ abstract class AbstractArticlePageAdminListConfigurator extends AbstractDoctrine
         $queryBuilder->innerJoin('b.node', 'n', 'WITH', 'b.node = n.id');
         $queryBuilder->innerJoin('b.nodeVersions', 'nv', 'WITH', 'b.publicNodeVersion = nv.id');
         $queryBuilder->andWhere('b.lang = :lang');
-        $queryBuilder->andWhere('not n.deleted');
+        $queryBuilder->andWhere('n.deleted = false');
         $queryBuilder->andWhere('n.refEntityName = :class');
         $queryBuilder->addOrderBy("nv.updated", "DESC");
         $queryBuilder->setParameter('lang', $this->locale);

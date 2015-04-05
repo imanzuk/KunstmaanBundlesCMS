@@ -119,7 +119,7 @@ class NodeTranslationRepository extends EntityRepository
             ->select('b', 'v')
             ->innerJoin('b.node', 'n', 'WITH', 'b.node = n.id')
             ->leftJoin('b.publicNodeVersion', 'v', 'WITH', 'b.publicNodeVersion = v.id')
-            ->where('n.deleted != 1 AND b.online = 1');
+            ->where('n.deleted != true AND b.online = true');
     }
 
     /**
@@ -180,7 +180,7 @@ class NodeTranslationRepository extends EntityRepository
             ->select('t', 'v', 'n')
             ->innerJoin('t.node', 'n', 'WITH', 't.node = n.id')
             ->leftJoin('t.publicNodeVersion', 'v', 'WITH', 't.publicNodeVersion = v.id')
-            ->where('n.deleted != 1')
+            ->where('n.deleted != true')
             ->addOrderBy('n.sequenceNumber', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1);
@@ -230,7 +230,7 @@ class NodeTranslationRepository extends EntityRepository
             ->setMaxResults(1);
 
         if (!$includeDeleted) {
-            $qb->andWhere('not n.deleted');
+            $qb->andWhere('n.deleted = false');
         }
 
         if (!empty($locale)) {
@@ -265,7 +265,7 @@ class NodeTranslationRepository extends EntityRepository
             ->innerJoin('b.node', 'n', 'WITH', 'b.node = n.id')
             ->leftJoin('b.publicNodeVersion', 'v', 'WITH', 'b.publicNodeVersion = v.id')
             ->where('n.parent IS NULL')
-            ->andWhere('n.deleted != 1');
+            ->andWhere('n.deleted != true');
 
         return $qb->getQuery()->getResult();
     }
@@ -338,7 +338,7 @@ class NodeTranslationRepository extends EntityRepository
                 'select nt.*
                 from kuma_node_translations nt
                 join kuma_nodes n on n.id = nt.node_id
-                where not n.deleted and nt.lang = :lang and locate(nt.url, :url) = 1
+                where n.deleted = false and nt.lang = :lang and locate(nt.url, :url) = 1
                 order by length(nt.url) desc limit 1',
                 $rsm
             );
@@ -388,8 +388,8 @@ class NodeTranslationRepository extends EntityRepository
             ->select('nt', 'v')
             ->innerJoin('nt.node', 'n', 'WITH', 'nt.node = n.id')
             ->leftJoin('nt.publicNodeVersion', 'v', 'WITH', 'nt.publicNodeVersion = v.id')
-            ->where('n.deleted != 1')
-            ->andWhere('nt.online = 1')
+            ->where('n.deleted != true')
+            ->andWhere('nt.online = true')
             ->addOrderBy('n.sequenceNumber', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1);

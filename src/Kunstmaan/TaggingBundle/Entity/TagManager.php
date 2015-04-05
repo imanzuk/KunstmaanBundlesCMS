@@ -110,8 +110,8 @@ EOD;
                     INNER JOIN kuma_node_versions as nodeversion
                     ON nodetranslation.publicNodeVersion = nodeversion.id
                     AND nodeversion.refEntityname = '{$escapedClass}'
-                    AND not node.deleted
-                    AND nodetranslation.online = 1
+                    AND node.deleted = false
+                    AND nodetranslation.online = true
                 )
 EOD;
         }

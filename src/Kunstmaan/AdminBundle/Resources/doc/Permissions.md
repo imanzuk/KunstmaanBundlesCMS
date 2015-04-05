@@ -128,7 +128,7 @@ public function findAllWithPermission(AclHelper $aclHelper, PermissionDefinition
 {
     $qb = $this->createQueryBuilder('b')
             ->select('b')
-            ->where('not b.deleted');
+            ->where('b.deleted = false');
     $query = $aclHelper->apply($qb, $permissionDef);
 
     return $query->getResult();
