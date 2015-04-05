@@ -48,7 +48,7 @@ class NodeRepository extends NestedTreeRepository
             ->select('b', 't', 'v')
             ->leftJoin('b.nodeTranslations', 't', 'WITH', 't.lang = :lang')
             ->leftJoin('t.publicNodeVersion', 'v', 'WITH', 't.publicNodeVersion = v.id')
-            ->where('b.deleted = 0')
+            ->where('not b.deleted')
             ->setParameter('lang', $lang)
             ->addOrderBy('t.weight', 'ASC')
             ->addOrderBy('t.title', 'ASC');
@@ -227,7 +227,7 @@ SQL;
                 'v',
                 '(v.node_id = n.id AND v.lang <> ?)'
             )
-            ->where('n.deleted = 0')
+            ->where('not n.deleted')
             ->addGroupBy('n.id')
             ->addOrderBy('t.weight', 'ASC')
             ->addOrderBy('t.title', 'ASC');
@@ -269,7 +269,7 @@ SQL;
         $qb->select('node', 't', 'v')
             ->innerJoin('node.nodeTranslations', 't')
             ->leftJoin('t.publicNodeVersion', 'v', 'WITH', 't.publicNodeVersion = v.id')
-            ->where('node.deleted = 0');
+            ->where('not node.deleted');
 
         if ($lang) {
             $qb->andWhere('t.lang = :lang')
@@ -297,7 +297,7 @@ SQL;
             ->select('b', 't', 'v')
             ->leftJoin('b.nodeTranslations', 't')
             ->leftJoin('t.publicNodeVersion', 'v', 'WITH', 't.publicNodeVersion = v.id')
-            ->where('b.deleted = 0')
+            ->where('not b.deleted')
             ->andWhere('b.parent IS NULL');
 
         $result = $qb->getQuery()->getResult();
@@ -321,7 +321,7 @@ SQL;
             ->select('n', 't', 'v')
             ->innerJoin('n.nodeTranslations', 't')
             ->leftJoin('t.publicNodeVersion', 'v', 'WITH', 't.publicNodeVersion = v.id')
-            ->where('n.deleted = 0')
+            ->where('not n.deleted')
             ->andWhere('n.internalName = :internalName')
             ->setParameter('internalName', $internalName)
             ->andWhere('t.lang = :lang')

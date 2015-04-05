@@ -230,7 +230,7 @@ class NodeTranslationRepository extends EntityRepository
             ->setMaxResults(1);
 
         if (!$includeDeleted) {
-            $qb->andWhere('n.deleted = 0');
+            $qb->andWhere('not n.deleted');
         }
 
         if (!empty($locale)) {
@@ -338,7 +338,7 @@ class NodeTranslationRepository extends EntityRepository
                 'select nt.*
                 from kuma_node_translations nt
                 join kuma_nodes n on n.id = nt.node_id
-                where n.deleted = 0 and nt.lang = :lang and locate(nt.url, :url) = 1
+                where not n.deleted and nt.lang = :lang and locate(nt.url, :url) = 1
                 order by length(nt.url) desc limit 1',
                 $rsm
             );

@@ -42,7 +42,7 @@ class {{ entity_class }}PageRepository extends AbstractArticlePageRepository
 	    ->innerJoin('KunstmaanNodeBundle:NodeTranslation', 't', 'WITH', 't.publicNodeVersion = v.id')
 	    ->innerJoin('KunstmaanNodeBundle:Node', 'n', 'WITH', 't.node = n.id')
 	    ->where('t.online = 1')
-	    ->andWhere('n.deleted = 0')
+	    ->andWhere('not n.deleted')
 	    ->andWhere('v.refEntityName = :refname')
 	    ->orderBy('a.date', 'DESC')
 	    ->setParameter('refname', "{{ namespace | replace({'\\': '\\\\'}) }}\\Entity\\Pages\\{{ entity_class }}Page");

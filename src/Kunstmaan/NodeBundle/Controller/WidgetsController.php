@@ -60,7 +60,7 @@ class WidgetsController extends Controller
         $qb->select('n.id, n.parent_id, t.weight, t.title, t.online, t.url')
             ->from('kuma_nodes', 'n')
             ->leftJoin('n', 'kuma_node_translations', 't', "(t.node_id = n.id AND t.lang = ?)")
-            ->where('n.deleted = 0')
+            ->where('not n.deleted')
             ->andWhere('t.online IN (0, 1)')
             ->addOrderBy('parent_id', 'ASC')
             ->addOrderBy('weight', 'ASC')
